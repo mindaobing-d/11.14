@@ -71,28 +71,29 @@ router.get('/api/del',async (ctx)=>{
 
 router.post('/api/updata',async (ctx)=>{
     let {id,name,bool,time} = ctx.request.body;
-    if(id){
-        let idarr = await query('select * from banner where id=?',[id]);
-        if(idarr.data.length){
-            let data = await query('update lists set name= ?,bool=?,time=? where id = ?',[name,bool,time]);
-            if(data.message === "error"){
-                ctx.body = {
-                    code:0,
-                    message:data.error
-                }
-            }else{
-                ctx.body = {
-                    code: 1,
-                    message: "成功"
-                }
-            }
+    if(name,bool,time){
+        let data = await query('update lists set name=?,bool=?,time=? where id=?',[name,bool,time,id]);
+        ctx.body={
+            code:1,
+            message:"修改成功"
         }
     }else{
-        ctx.body = {
-            code:0,
-            msg:'数据不存在'
+        ctx.body={
+            message:"修改失败"
         }
     }
+            
+            // if(data.message === "error"){
+            //     ctx.body = {
+            //         code:0,
+            //         message:data.error
+            //     }
+            // }else{
+            //     ctx.body = {
+            //         code: 1,
+            //         message: "成功"
+            //     }
+            // }
 })
 
 app.listen(7001,()=>{
