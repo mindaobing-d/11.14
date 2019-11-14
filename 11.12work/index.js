@@ -25,27 +25,21 @@ router.get('/api/list',async (ctx)=>{
 })
 router.get('/api/lists',async ctx => {
 
-    // 查第一页的数据  pagenum=1  limit=2
-    try{
-        let {pagenum=1,limit=2} = ctx.query;
-        let startIndex = (pagenum - 1)*limit;
-
-        let totalData = await ctx.mysql.query('select count(*) from lists');
-
-        console.log(totalData[0]['count(*)'])
-
-        let data = await ctx.mysql.query(`select * from lists limit ${startIndex},${limit}`);
-        ctx.body = {
-            code:1,
-            data,
-            total:totalData[0]['count(*)']
-        }
-    }catch(e){
-        ctx.body = {
-            code:0,
-            msg:e
-        }
+    let {page=1,pageSize=2}=ctx.request.query
+    pageSize=pageSize*1
+    page=(page*1-1)*pageSize
+    let count=await query('select count(*) as count from lists');
+    // ctx.body={
+    //     count
+    // }
+    console.log(count)
+    let data=await query(`select * from lists limit ${page},${pageSize}`)
+    ctx.body={
+        code:1,
+        data,
+        count
     }
+
 })
 
 //添加数据库
